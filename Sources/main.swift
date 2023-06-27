@@ -31,24 +31,46 @@ let nameOrTempSortTypeMenu = Menu(title: "Sort by name or tempreture!", items:[
 
 let addOrRemoveFavMenu = Menu(title: "Add/delete this location to/from favorites!", items:[
     MenuItem(title:"add", action: {
-        // TODO
-        // Menu.backwardDepth
+        if !Menu.favoriteLocations.contains(Menu.currentLocation){
+            Menu.favoriteLocations.append(Menu.currentLocation)
+            Menu.backwardDepth = 1
+
+            print("location successfully added!")
+        } else{
+            print("location already in favourites!")
+        }
+
     }),
 
     MenuItem(title:"delete", action:{
-        // TODO
+        if let index = Menu.favoriteLocations.firstIndex(of: Menu.currentLocation) {
+            Menu.favoriteLocations.remove(at: index)
+            Menu.backwardDepth = 1
+
+            print("location successfully removed!")
+        } else{
+            print("location is not in favourites")
+        }
     }),
 ]
 )
 
 let chooseLocationMenu = Menu(title: "Choose your location!", items: [
     MenuItem(title:"name", action: {
-        // TODO
+        let name: String = readLine() ?? ""
+        Menu.currentLocation = name
+
         addOrRemoveFavMenu.run()
     }),
 
     MenuItem(title:"coords", action: {
-        // TODO
+        let coord: String = readLine() ?? ""
+        let coordsList = coord.split(separator: " ")
+        let coordination = (Double(coordsList[0])!, Double(coordsList[1])!)
+        
+        let util = NetworkUtils()
+        Menu.currentLocation = util.apiGetNameByGeolocationCoords(coordination)
+
         addOrRemoveFavMenu.run()
     }),
 ])

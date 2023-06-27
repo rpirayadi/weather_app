@@ -1,3 +1,6 @@
+import Glibc
+
+
 class Menu {
     static var backwardDepth: Int = 0
     static var isAscen: Bool = false
@@ -21,7 +24,7 @@ class Menu {
     public func run() {
         while true {
             
-            print("\u{001B}[2J")
+            system("clear")
             print(title)
 
             print(">> ", terminator: "")
