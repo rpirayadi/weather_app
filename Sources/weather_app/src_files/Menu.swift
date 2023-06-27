@@ -1,5 +1,3 @@
-
-
 class Menu {
     public let title: String
     public var items: [MenuItem]
@@ -37,37 +35,8 @@ class Menu {
             if !isValid {
                 print("Invalid command! Please try again.")
             }
-            print("Press enter to continue...", terminator: "")
+            print("Press any key to continue...", terminator: "")
             _ = readLine()
         }
     }
 }
-
-class MenuItem {
-    private let title: String 
-    public let action: () -> Void
-
-    public init(title: String, action: @escaping () -> Void) {
-        self.title = title
-        self.action = action
-    }
-
-    public func getTitle() -> String{
-        return title
-    }
-}
-
-let mainMenu = Menu(title: "Welcome to Cryptocurrency Swift!", items: [
-    MenuItem(title: "View Cryptocurrencies", action: {
-        print("view")
-    }),
-
-    MenuItem(title: "View Profile",  action: {
-        print("profile")
-    }),
-])
-
-
-mainMenu.run()
-
-
