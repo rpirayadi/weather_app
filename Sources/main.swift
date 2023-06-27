@@ -5,25 +5,25 @@ let showFavoritesSortedMenu = Menu(title: "Sorted Favorite locaitons!", items:[]
 
 func getTableFromNetworkUtils() -> String {
     let utils = NetworkUtils()
-    let forcasts: [cityInfo] = utils.getFavoriteLocationsForcasts(Menu.favoriteLocations)
+    var forecasts: [cityInfo] = utils.getFavoriteLocationsForecasts(Menu.favoriteLocations)
     
     if Menu.isTemp {
         if Menu.isAscen {
-            forcasts.sorted($0.temp < $1.temp)
+            forecasts = forecasts.sorted { $0.temp < $1.temp }
         } else {
-            forcasts.sorted($0.temp > $1.temp)
+            forecasts = forecasts.sorted { $0.temp > $1.temp }
         }
     } else {
         if Menu.isAscen {
-            forcasts.sorted($0.name < $1.name)
+            forecasts = forecasts.sorted { $0.name < $1.name }
         } else {
-            forcasts.sorted($0.name > $1.name)
+            forecasts = forecasts.sorted { $0.name > $1.name }
         }
     }
 
     var res: String = ""
-    for forcast in forcasts {
-        res += forcast.toString()
+    for forecast in forecasts {
+        res += forecast.toString()
     }
     return res
 }
