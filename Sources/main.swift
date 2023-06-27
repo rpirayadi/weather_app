@@ -4,10 +4,13 @@ let showFavoritesSortedMenu = Menu(title: "Sorted Favorite locaitons!", items:[]
 
 
 func getTableFromNetworkUtils() -> String {
+    var res: String = ""
+
+
     let utils = NetworkUtils()
-    var forecasts: [cityInfo] = utils.getFavoriteLocationsForecasts(Menu.favoriteLocations)
-    
-    if Menu.isTemp {
+    do{
+        var forecasts: [cityInfo] = try utils.getFavoriteLocationsForecasts(favorites: Menu.favoriteLocations)
+        if Menu.isTemp {
         if Menu.isAscen {
             forecasts = forecasts.sorted { $0.temp < $1.temp }
         } else {
@@ -19,11 +22,13 @@ func getTableFromNetworkUtils() -> String {
         } else {
             forecasts = forecasts.sorted { $0.name > $1.name }
         }
-    }
 
-    var res: String = ""
-    for forecast in forecasts {
+        for forecast in forecasts {
         res += forecast.toString()
+        }
+    }   
+    }catch{
+        print("error")
     }
     return res
 }
@@ -94,9 +99,20 @@ let chooseLocationMenu = Menu(title: "Choose your location!", items: [
         let coordination = (Double(coordsList[0])!, Double(coordsList[1])!)
         
         let util = NetworkUtils()
-        Menu.currentLocation = util.apiGetNameByGeolocationCoords(coordination)
 
-        addOrRemoveFavMenu.run()
+        do{
+            let possibleName = try util.apiGetNameByGeolocationCoords(coords: coordination)
+            if let name = possibleName{
+                Menu.currentLocation = name
+                addOrRemoveFavMenu.run()
+            } else{
+                print("Invalid Geolocation")
+            }
+        }
+        catch {
+            print("error")
+        }
+
     }),
 ])
 

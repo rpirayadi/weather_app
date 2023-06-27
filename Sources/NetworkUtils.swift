@@ -50,8 +50,13 @@ class NetworkUtils {
         return nil
     }
 
-    func getFavoriteLocationsForecasts(favorites: [String]) throws -> [Double]? {
-        return nil
+    func getFavoriteLocationsForecasts(favorites: [String]) throws -> [cityInfo] {
+        var cityInformations : [cityInfo] = []
+        for favoriteCity in favorites{
+            let forcast = try apiForecastByName(name: favoriteCity)![0]
+            cityInformations.append(cityInfo(name: favoriteCity, temp: forcast.0, wind: forcast.1))
+        }
+        return cityInformations
     }
 }
 
