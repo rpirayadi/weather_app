@@ -1,30 +1,55 @@
 
 
-
 let showFavoritesSortedMenu = Menu(title: "Sorted Favorite locaitons!", items:[])
 
 
+func getTableFromNetworkUtils() -> String {
+    let utils = NetworkUtils()
+    var forecasts: [cityInfo] = utils.getFavoriteLocationsForecasts(Menu.favoriteLocations)
+    
+    if Menu.isTemp {
+        if Menu.isAscen {
+            forecasts = forecasts.sorted { $0.temp < $1.temp }
+        } else {
+            forecasts = forecasts.sorted { $0.temp > $1.temp }
+        }
+    } else {
+        if Menu.isAscen {
+            forecasts = forecasts.sorted { $0.name < $1.name }
+        } else {
+            forecasts = forecasts.sorted { $0.name > $1.name }
+        }
+    }
+
+    var res: String = ""
+    for forecast in forecasts {
+        res += forecast.toString()
+    }
+    return res
+}
 
 let ascenOrDescenSortTypeMenu = Menu(title: "Sort in ascending or descending order!", items:[
     MenuItem(title:"ascen", action:{
-        // TODO
-        showFavoritesSortedMenu.run()
+        Menu.isAscen = true
+        Menu.backwardDepth = 2
+        showFavoritesSortedMenu.run(menuContent: getTableFromNetworkUtils())
     }),
 
     MenuItem(title:"descen", action:{
-        // TODO
-        showFavoritesSortedMenu.run()
+        Menu.isAscen = false
+        Menu.backwardDepth = 2
+        showFavoritesSortedMenu.run(menuContent: getTableFromNetworkUtils())
     }),
 ])
 
 let nameOrTempSortTypeMenu = Menu(title: "Sort by name or tempreture!", items:[
     MenuItem(title:"name", action: {
-        // TODO
+        Menu.isTemp = false
         ascenOrDescenSortTypeMenu.run()
     }),
 
     MenuItem(title:"temp", action: {
-        // TODO
+        Menu.isTemp = true
         ascenOrDescenSortTypeMenu.run()
     }),
 ])

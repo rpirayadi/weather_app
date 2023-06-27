@@ -21,11 +21,12 @@ class Menu {
         }))
     }
 
-    public func run() {
+    public func run(menuContent: String = "") {
         while true {
             
             system("clear")
             print(title)
+            print(menuContent)
 
             print(">> ", terminator: "")
             let command: String = readLine() ?? ""
