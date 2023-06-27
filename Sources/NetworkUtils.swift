@@ -2,14 +2,14 @@ import FoundationNetworking
 import Foundation
 
 class NetworkUtils {
-    let apiGeoURL = "https://geocoding-api.open-meteo.com/v1/search"
-    let apiForecastURL = "https://api.open-meteo.com/v1/forecast"
+    let apiGeoURL = "http://geocoding-api.open-meteo.com/v1/search"
+    let apiForecastURL = "http://api.open-meteo.com/v1/forecast"
     let apiGeoToNameKey = "0bd279c8e4f12ad48a5a3def76bfbade"
     let apiGeoToNameURL = "http://api.positionstack.com/v1/reverse"
 
     func apiGeolocationCoordsByName(name: String) throws -> (Double, Double)? {
         let url = URL(string: "\(apiGeoURL)?name=\(name)")
-        //print("URL: \(url!)")
+        print("URL: \(url!)")
         let data = try Data(contentsOf: url!)
         let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
         //print(json)
@@ -60,6 +60,7 @@ class NetworkUtils {
 
     func apiForecastByName(name: String) throws -> [(Double, Double)]? {
         if let coords = try apiGeolocationCoordsByName(name: name) {
+            print("aa", coords)
             return try apiForecastByCoords(coords: coords)
         }
         return nil

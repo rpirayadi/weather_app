@@ -87,10 +87,26 @@ let addOrRemoveFavMenu = Menu(title: "Add/delete this location to/from favorites
 
 let chooseLocationMenu = Menu(title: "Choose your location!", items: [
     MenuItem(title:"name", action: {
+        print("m")
         let name: String = readLine() ?? ""
+        print("m", name)
         Menu.currentLocation = name
+        
+        let util = NetworkUtils()
 
-        addOrRemoveFavMenu.run()
+        do{
+            let possibleForecast = try util.apiForecastByName(name: name)
+            if let forecast = possibleForecast{
+                print(forecast, name)
+                addOrRemoveFavMenu.run()
+
+            }else{
+                print("Invalid name!")
+            }
+        }catch{
+            print("error")
+        }
+
     }),
 
     MenuItem(title:"coords", action: {
