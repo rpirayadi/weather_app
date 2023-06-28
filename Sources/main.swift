@@ -150,4 +150,11 @@ let mainMenu = Menu(title: "Welcome to Weather Application!", items: [
 ])
 
 
+// let util = NetworkUtils()
+// do {
+//    print( try util.apiGeolocationCoordsByName(name: "tehran") )
+// } catch {
+//     print("SDFSDF")
+// }
+
 mainMenu.run()

@@ -2,7 +2,7 @@ import FoundationNetworking
 import Foundation
 
 class NetworkUtils {
-    let apiGeoURL = "http://geocoding-api.open-meteo.com/v1/search"
+    let apiGeoURL = "http://api.positionstack.com/v1/forward"
     let apiForecastURL = "http://api.open-meteo.com/v1/forecast"
     let apiGeoToNameKey = "0bd279c8e4f12ad48a5a3def76bfbade"
     let apiGeoToNameURL = "http://api.positionstack.com/v1/reverse"
@@ -11,7 +11,7 @@ class NetworkUtils {
 
     func apiGeolocationCoordsByName(name: String) throws -> (Double, Double)? {
         var urlComps = URLComponents(string: apiGeoURL)!
-        let queryItems = [URLQueryItem(name: "name", value: name)]
+        let queryItems = [URLQueryItem(name: "access_key", value: apiGeoToNameKey), URLQueryItem(name: "query", value: name)]
         urlComps.queryItems = queryItems
         let url = urlComps.url!
         //print("\(apiGeoURL)?name=\(name)")
@@ -22,15 +22,28 @@ class NetworkUtils {
         while !NetworkUtils.apiFinished { continue }
         
         let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
-        //print(json)
-        if !json.keys.contains("results") {
+        if json.keys.contains("error") {
+            let error = json["error"] as! [String: Any]
+            print(error["code"] as Any)
             return nil
         }
-        let results = json["results"] as! [[String: Any]] 
+        let results = json["data"] as! [[String: Any]]
         let result = results[0]
-        let latitude = result["latitude"] as! NSNumber
-        let longitude = result["longitude"] as! NSNumber
-        return (Double(exactly: latitude)!, Double(exactly: longitude)!)
+        let latitude = result["latitude"] as! Double
+        let longitude = result["longitude"] as! Double
+        return (latitude, longitude)
+
+
+        // let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
+        // //print(json)
+        // if !json.keys.contains("results") {
+        //     return nil
+        // }
+        // let results = json["results"] as! [[String: Any]] 
+        // let result = results[0]
+        // let latitude = result["latitude"] as! NSNumber
+        // let longitude = result["longitude"] as! NSNumber
+        // return (Double(exactly: latitude)!, Double(exactly: longitude)!)
     }
 
     func apiGetNameByGeolocationCoords(coords: (Double, Double)) throws -> String? {
@@ -147,6 +160,5 @@ class NetworkUtils {
         task.resume()
     }
 }
-
 
 
