@@ -10,6 +10,7 @@ class NetworkUtils {
     static var apiFinished: Bool = false
 
     func apiGeolocationCoordsByName(name: String) throws -> (Double, Double)? {
+        print("\(apiGeoURL)?name=\(name)")
         let url = URL(string: "\(apiGeoURL)?name=\(name)")!
         NetworkUtils.apiFinished = false        
         createAndRunURLSession(url: url)
