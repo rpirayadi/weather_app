@@ -143,5 +143,4 @@ let mainMenu = Menu(title: "Welcome to Weather Application!", items: [
 ])
 
 
-
 mainMenu.run()

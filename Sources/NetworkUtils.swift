@@ -6,12 +6,16 @@ class NetworkUtils {
     let apiForecastURL = "http://api.open-meteo.com/v1/forecast"
     let apiGeoToNameKey = "0bd279c8e4f12ad48a5a3def76bfbade"
     let apiGeoToNameURL = "http://api.positionstack.com/v1/reverse"
+    static var apiData: Data? = nil
+    static var apiFinished: Bool = false
 
     func apiGeolocationCoordsByName(name: String) throws -> (Double, Double)? {
-        let url = URL(string: "\(apiGeoURL)?name=\(name)")
-        print("URL: \(url!)")
-        let data = try Data(contentsOf: url!)
-        let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        let url = URL(string: "\(apiGeoURL)?name=\(name)")!
+        NetworkUtils.apiFinished = false        
+        createAndRunURLSession(url: url)
+        while !NetworkUtils.apiFinished { continue }
+        print("URL: \(url)")
+        let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
         //print(json)
         if !json.keys.contains("results") {
             return nil
@@ -24,10 +28,12 @@ class NetworkUtils {
     }
 
     func apiGetNameByGeolocationCoords(coords: (Double, Double)) throws -> String? {
-        let url = URL(string: "\(apiGeoToNameURL)?access_key=\(apiGeoToNameKey)&query=\(coords.0),\(coords.1)")
-        print("URL: \(url!)")
-        let data = try Data(contentsOf: url!)
-        let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        let url = URL(string: "\(apiGeoToNameURL)?access_key=\(apiGeoToNameKey)&query=\(coords.0),\(coords.1)")!
+        print("URL: \(url)")
+        NetworkUtils.apiFinished = false
+        createAndRunURLSession(url: url)
+        while !NetworkUtils.apiFinished { continue }
+        let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
         if json.keys.contains("error") {
             let error = json["error"] as! [String: Any]
             print(error["code"] as Any)
@@ -39,10 +45,12 @@ class NetworkUtils {
     }
 
     func apiForecastByCoords(coords: (Double, Double)) throws -> [(Double, Double)]? {
-        let url = URL(string: "\(apiForecastURL)?latitude=\(coords.0)&longitude=\(coords.1)&hourly=temperature_2m,windspeed_10m&current_weather=true")
-        print("URL: \(url!)")
-        let data = try Data(contentsOf: url!)
-        let json = try JSONSerialization.jsonObject(with: data, options: []) as! [String: Any]
+        let url = URL(string: "\(apiForecastURL)?latitude=\(coords.0)&longitude=\(coords.1)&hourly=temperature_2m,windspeed_10m&current_weather=true")!
+        print("URL: \(url)")
+        NetworkUtils.apiFinished = false
+        createAndRunURLSession(url: url)
+        while !NetworkUtils.apiFinished { continue }
+        let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
         if !json.keys.contains("hourly") {
             return nil
         }
@@ -100,12 +108,28 @@ class NetworkUtils {
         }
         return output
     }
+
+    func createAndRunURLSession(url: URL)  {
+        let defaultSession = URLSession.shared
+        let request = URLRequest(url: url)
+        let task = defaultSession.dataTask(with: request as URLRequest, completionHandler:{data, response, error in 
+            guard error == nil else {
+                print("ERROR IN CREATING URL REQUEST!")
+                return
+            }
+            guard let data = data else {
+                print("NO DATA RECEIVED!")
+                return
+            }
+            
+                NetworkUtils.apiData = data
+                NetworkUtils.apiFinished = true
+            
+                
+            })
+        task.resume()
+    }
 }
 
 
-// let util = NetworkUtils()
-// do{ 
-//     print(try util.apiForecastByCoords(coords:(50, 50)) as Any)
-// } catch {
-//     print("Gand!")
-// }
+
