@@ -13,8 +13,9 @@ class NetworkUtils {
         let url = URL(string: "\(apiGeoURL)?name=\(name)")!
         NetworkUtils.apiFinished = false        
         createAndRunURLSession(url: url)
-        while !NetworkUtils.apiFinished { continue }
         print("URL: \(url)")
+        while !NetworkUtils.apiFinished { continue }
+        
         let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
         //print(json)
         if !json.keys.contains("results") {
@@ -113,18 +114,20 @@ class NetworkUtils {
         let defaultSession = URLSession.shared
         let request = URLRequest(url: url)
         let task = defaultSession.dataTask(with: request as URLRequest, completionHandler:{data, response, error in 
+            
             guard error == nil else {
                 print("ERROR IN CREATING URL REQUEST!")
+                NetworkUtils.apiFinished = true
                 return
             }
             guard let data = data else {
                 print("NO DATA RECEIVED!")
+                NetworkUtils.apiFinished = true
                 return
             }
             
                 NetworkUtils.apiData = data
                 NetworkUtils.apiFinished = true
-            
                 
             })
         task.resume()
