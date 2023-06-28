@@ -85,11 +85,18 @@ let addOrRemoveFavMenu = Menu(title: "Add/delete this location to/from favorites
 ]
 )
 
+func printLocationResults(name, forecasts) -> Void {
+    print(name + "'s weather forcast:")
+    print("temparature(C) \t" + "wind(km/h)")
+    for forecast in forecasts{
+        print(forecast[i].0 + "\t\t\t" + forecast[i].1 + "\t\t"\t)
+    }
+    
+}
+
 let chooseLocationMenu = Menu(title: "Choose your location!", items: [
     MenuItem(title:"name", action: {
-        print("m")
         let name: String = readLine() ?? ""
-        print("m", name)
         Menu.currentLocation = name
         
         let util = NetworkUtils()
@@ -97,7 +104,7 @@ let chooseLocationMenu = Menu(title: "Choose your location!", items: [
         do{
             let possibleForecast = try util.apiForecastByName(name: name)
             if let forecast = possibleForecast{
-                print(forecast, name)
+                printLocationResults(name, forecast)
                 addOrRemoveFavMenu.run()
 
             }else{
