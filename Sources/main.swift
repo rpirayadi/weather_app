@@ -4,7 +4,7 @@ let showFavoritesSortedMenu = Menu(title: "Sorted Favorite locaitons!", items:[]
 
 
 func getTableFromNetworkUtils() -> String {
-    var res: String = "Name \t\t Temp(C) \t\t Wind(km/h)\n"
+    var res: String = "Name \t\t\t Temp(C) \t\t\t Wind(km/h)\n"
 
 
     let utils = NetworkUtils()
@@ -22,11 +22,10 @@ func getTableFromNetworkUtils() -> String {
             } else {
                 forecasts = forecasts.sorted { $0.name > $1.name }
             }
-
-            for forecast in forecasts {
+        }  
+        for forecast in forecasts {
             res += forecast.toString()
-            }
-        }   
+        } 
     }catch{
         print("error")
     }

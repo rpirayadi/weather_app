@@ -10,6 +10,6 @@ struct cityInfo {
     }
 
     func toString() -> String {
-        return self.name + "\t\t" + String(cityInfo.roundToThreeDigits(num: self.temp)) + "\t\t" + String(cityInfo.roundToThreeDigits(num: self.wind)) + "\n"
+        return self.name + "\t\t\t" + String(cityInfo.roundToThreeDigits(num: self.temp)) + "\t\t\t" + String(cityInfo.roundToThreeDigits(num: self.wind)) + "\n"
     }
 }

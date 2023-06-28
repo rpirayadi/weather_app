@@ -70,7 +70,7 @@ class NetworkUtils {
     func apiForecastByCoords(coords: (Double, Double)) throws -> [(Double, Double)]? {
         var urlComps = URLComponents(string: apiForecastURL)!
         let queryItems = [URLQueryItem(name: "latitude", value: String(coords.0)), URLQueryItem(name: "longitude", value: String(coords.1))
-                        , URLQueryItem(name: "hourly", value: "temperature_2m,winspeed_10m"), URLQueryItem(name: "current_weather", value: "true")]
+                        , URLQueryItem(name: "hourly", value: "temperature_2m,windspeed_10m"), URLQueryItem(name: "current_weather", value: "true")]
         urlComps.queryItems = queryItems
         let url = urlComps.url!
         // let url = URL(string: "\(apiForecastURL)?latitude=\(coords.0)&longitude=\(coords.1)&hourly=temperature_2m,windspeed_10m&current_weather=true")!
@@ -143,6 +143,7 @@ class NetworkUtils {
         let task = defaultSession.dataTask(with: request as URLRequest, completionHandler:{data, response, error in 
             
             guard error == nil else {
+                print(error)
                 print("ERROR IN CREATING URL REQUEST!")
                 NetworkUtils.apiFinished = true
                 return
