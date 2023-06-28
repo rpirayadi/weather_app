@@ -10,8 +10,12 @@ class NetworkUtils {
     static var apiFinished: Bool = false
 
     func apiGeolocationCoordsByName(name: String) throws -> (Double, Double)? {
-        print("\(apiGeoURL)?name=\(name)")
-        let url = URL(string: "\(apiGeoURL)?name=\(name)")!
+        var urlComps = URLComponents(string: apiGeoURL)!
+        let queryItems = [URLQueryItem(name: "name", value: name)]
+        urlComps.queryItems = queryItems
+        let url = urlComps.url!
+        //print("\(apiGeoURL)?name=\(name)")
+        //let url = URL(string: "\(apiGeoURL)?name=\(name)")!
         NetworkUtils.apiFinished = false        
         createAndRunURLSession(url: url)
         print("URL: \(url)")
@@ -30,7 +34,11 @@ class NetworkUtils {
     }
 
     func apiGetNameByGeolocationCoords(coords: (Double, Double)) throws -> String? {
-        let url = URL(string: "\(apiGeoToNameURL)?access_key=\(apiGeoToNameKey)&query=\(coords.0),\(coords.1)")!
+        var urlComps = URLComponents(string: apiGeoToNameURL)!
+        let queryItems = [URLQueryItem(name: "access_key", value: apiGeoToNameKey), URLQueryItem(name: "query", value: "\(coords.0),\(coords.1)")]
+        urlComps.queryItems = queryItems
+        let url = urlComps.url!
+        // let url = URL(string: "\(apiGeoToNameURL)?access_key=\(apiGeoToNameKey)&query=\(coords.0),\(coords.1)")!
         print("URL: \(url)")
         NetworkUtils.apiFinished = false
         createAndRunURLSession(url: url)
@@ -47,7 +55,12 @@ class NetworkUtils {
     }
 
     func apiForecastByCoords(coords: (Double, Double)) throws -> [(Double, Double)]? {
-        let url = URL(string: "\(apiForecastURL)?latitude=\(coords.0)&longitude=\(coords.1)&hourly=temperature_2m,windspeed_10m&current_weather=true")!
+        var urlComps = URLComponents(string: apiForecastURL)!
+        let queryItems = [URLQueryItem(name: "latitude", value: String(coords.0)), URLQueryItem(name: "longitude", value: String(coords.1))
+                        , URLQueryItem(name: "hourly", value: "temperature_2m,winspeed_10m"), URLQueryItem(name: "current_weather", value: "true")]
+        urlComps.queryItems = queryItems
+        let url = urlComps.url!
+        // let url = URL(string: "\(apiForecastURL)?latitude=\(coords.0)&longitude=\(coords.1)&hourly=temperature_2m,windspeed_10m&current_weather=true")!
         print("URL: \(url)")
         NetworkUtils.apiFinished = false
         createAndRunURLSession(url: url)
