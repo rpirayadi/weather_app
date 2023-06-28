@@ -24,7 +24,7 @@ class Menu {
     public func run(menuContent: String = "") {
         while true {
             
-            // system("clear")
+            system("clear")
             print(title)
             print(menuContent)
 

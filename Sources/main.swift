@@ -4,29 +4,29 @@ let showFavoritesSortedMenu = Menu(title: "Sorted Favorite locaitons!", items:[]
 
 
 func getTableFromNetworkUtils() -> String {
-    var res: String = ""
+    var res: String = "Name \t\t Temp(C) \t\t Wind(km/h)\n"
 
 
     let utils = NetworkUtils()
     do{
         var forecasts: [cityInfo] = try utils.getFavoriteLocationsForecasts(favorites: Menu.favoriteLocations)
         if Menu.isTemp {
-        if Menu.isAscen {
-            forecasts = forecasts.sorted { $0.temp < $1.temp }
+            if Menu.isAscen {
+                forecasts = forecasts.sorted { $0.temp < $1.temp }
+            } else {
+                forecasts = forecasts.sorted { $0.temp > $1.temp }
+            }
         } else {
-            forecasts = forecasts.sorted { $0.temp > $1.temp }
-        }
-    } else {
-        if Menu.isAscen {
-            forecasts = forecasts.sorted { $0.name < $1.name }
-        } else {
-            forecasts = forecasts.sorted { $0.name > $1.name }
-        }
+            if Menu.isAscen {
+                forecasts = forecasts.sorted { $0.name < $1.name }
+            } else {
+                forecasts = forecasts.sorted { $0.name > $1.name }
+            }
 
-        for forecast in forecasts {
-        res += forecast.toString()
-        }
-    }   
+            for forecast in forecasts {
+            res += forecast.toString()
+            }
+        }   
     }catch{
         print("error")
     }
@@ -87,9 +87,9 @@ let addOrRemoveFavMenu = Menu(title: "Add/delete this location to/from favorites
 
 func printLocationResults(name: String, forecasts: [(Double, Double)]) -> Void {
     print(name + "'s weather forcast:")
-    print("temparature(C) \t" + "wind(km/h)")
+    print("Temparature(C) \t\t Wind(km/h)")
     for forecast in forecasts{
-        print(String(forecast.0) + "\t\t\t" + String(forecast.1) + "\t\t\t")
+        print(String(cityInfo.roundToThreeDigits(num: forecast.0)) + "\t\t\t" + String(cityInfo.roundToThreeDigits(num: forecast.1)) + "\t\t\t")
     }
     
 }
@@ -105,6 +105,7 @@ let chooseLocationMenu = Menu(title: "Choose your location!", items: [
             let possibleForecast = try util.apiForecastByName(name: name)
             if let forecast = possibleForecast{
                 printLocationResults(name: name, forecasts: forecast)
+                _ = readLine()
                 addOrRemoveFavMenu.run()
 
             }else{
@@ -127,7 +128,19 @@ let chooseLocationMenu = Menu(title: "Choose your location!", items: [
             let possibleName = try util.apiGetNameByGeolocationCoords(coords: coordination)
             if let name = possibleName{
                 Menu.currentLocation = name
-                addOrRemoveFavMenu.run()
+                do{
+                    let possibleForecast = try util.apiForecastByName(name: name)
+                    if let forecast = possibleForecast{
+                        printLocationResults(name: name, forecasts: forecast)
+                        _ = readLine()
+                        addOrRemoveFavMenu.run()
+
+                    }else{
+                        print("Invalid name!")
+                    }
+                }catch{
+                    print("error")
+                }
             } else{
                 print("Invalid Geolocation")
             }
