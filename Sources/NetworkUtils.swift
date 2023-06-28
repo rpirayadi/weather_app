@@ -21,29 +21,21 @@ class NetworkUtils {
         print("URL: \(url)")
         while !NetworkUtils.apiFinished { continue }
         
-        let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
-        if json.keys.contains("error") {
-            let error = json["error"] as! [String: Any]
-            print(error["code"] as Any)
+        if let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as? [String: Any] {
+            if json.keys.contains("error") {
+                let error = json["error"] as! [String: Any]
+                print(error["code"] as Any)
+                return nil
+            }
+            let results = json["data"] as! [[String: Any]]
+            let result = results[0]
+            let latitude = result["latitude"] as! Double
+            let longitude = result["longitude"] as! Double
+            return (latitude, longitude)
+        } else {
+            print("NO DATA RECEIVED FROM API!")
             return nil
         }
-        let results = json["data"] as! [[String: Any]]
-        let result = results[0]
-        let latitude = result["latitude"] as! Double
-        let longitude = result["longitude"] as! Double
-        return (latitude, longitude)
-
-
-        // let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
-        // //print(json)
-        // if !json.keys.contains("results") {
-        //     return nil
-        // }
-        // let results = json["results"] as! [[String: Any]] 
-        // let result = results[0]
-        // let latitude = result["latitude"] as! NSNumber
-        // let longitude = result["longitude"] as! NSNumber
-        // return (Double(exactly: latitude)!, Double(exactly: longitude)!)
     }
 
     func apiGetNameByGeolocationCoords(coords: (Double, Double)) throws -> String? {
@@ -56,15 +48,19 @@ class NetworkUtils {
         NetworkUtils.apiFinished = false
         createAndRunURLSession(url: url)
         while !NetworkUtils.apiFinished { continue }
-        let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
-        if json.keys.contains("error") {
-            let error = json["error"] as! [String: Any]
-            print(error["code"] as Any)
+        if let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as? [String: Any] {
+            if json.keys.contains("error") {
+                let error = json["error"] as! [String: Any]
+                print(error["code"] as Any)
+                return nil
+            }
+            let results = json["data"] as! [[String: Any]]
+            let result = results[0]
+            return result["region"] as? String
+        } else {
+            print("NO DATA RECEIVED FROM API!")
             return nil
         }
-        let results = json["data"] as! [[String: Any]]
-        let result = results[0]
-        return result["region"] as? String
     }
 
     func apiForecastByCoords(coords: (Double, Double)) throws -> [(Double, Double)]? {
@@ -78,20 +74,25 @@ class NetworkUtils {
         NetworkUtils.apiFinished = false
         createAndRunURLSession(url: url)
         while !NetworkUtils.apiFinished { continue }
-        let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as! [String: Any]
-        if !json.keys.contains("hourly") {
+        if let json = try JSONSerialization.jsonObject(with: NetworkUtils.apiData!, options: []) as? [String: Any] {
+            if !json.keys.contains("hourly") {
+                return nil
+            }
+            let hourly = json["hourly"] as! [String: Any]
+            let temps = hourly["temperature_2m"] as! [Double]
+            let winds = hourly["windspeed_10m"] as! [Double]
+            let tempsWeekForecast = getWeekTempForcast(temps: temps)
+            let windsWeekForecast = getWeekWindForcast(winds: winds)
+            var output: [(Double, Double)] = []
+            for (index, element) in tempsWeekForecast.enumerated() {
+                output.append((element, windsWeekForecast[index]))
+            }
+            return output
+        } else {
+            print("NO DATA RECEIVED FROM API!")
             return nil
         }
-        let hourly = json["hourly"] as! [String: Any]
-        let temps = hourly["temperature_2m"] as! [Double]
-        let winds = hourly["windspeed_10m"] as! [Double]
-        let tempsWeekForecast = getWeekTempForcast(temps: temps)
-        let windsWeekForecast = getWeekWindForcast(winds: winds)
-        var output: [(Double, Double)] = []
-        for (index, element) in tempsWeekForecast.enumerated() {
-            output.append((element, windsWeekForecast[index]))
-        }
-        return output
+        
     }
 
     func apiForecastByName(name: String) throws -> [(Double, Double)]? {
