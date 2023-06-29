@@ -3,15 +3,14 @@ We have implemented a weather forecast application which allows the user to view
 ## Main Menu
 You can sign up and then sign in with your username & password!
 
-![signIn](https://github.com/s0heil20/BookStore/assets/59290468/ac03621a-e804-4d35-9cad-c255936e74e6)
-![signUp](https://github.com/s0heil20/BookStore/assets/59290468/e0bcf17e-9ae1-43aa-b971-9ab6fc02b0ff)
+![image](https://github.com/rpirayadi/weather_app/assets/62210316/e8cf2341-87cd-462d-b06e-8b724b2cdb01)
 
 
 ## Location Selection Menu
 In this menu, a preview list of books is displayed and you can click on them and you'll be redirected to the detailed book menu!
 
-![image](https://github.com/s0heil20/BookStore/assets/59181565/c5a9b233-7f9d-4243-b817-e476f5dfa5f1)
-![image](https://github.com/s0heil20/BookStore/assets/59181565/ab8c4de5-cf2d-4bcb-a152-0149b6944210)
+![image](https://github.com/rpirayadi/weather_app/assets/62210316/5ab8e059-e75b-452c-99f8-87d8a56a104b)
+
 
 ## Favorite Location Addition/Deletion Menu
 In this menu you can see a more detailed preview of the selected book. You can also add it to your cart or to your favorites! You can also share or submit feedback.
