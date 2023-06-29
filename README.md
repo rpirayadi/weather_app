@@ -16,26 +16,24 @@ In this menu, a preview list of books is displayed and you can click on them and
 In this menu you can see a more detailed preview of the selected book. You can also add it to your cart or to your favorites! You can also share or submit feedback.
 
 
-![detailedMenu1](https://github.com/s0heil20/BookStore/assets/59290468/31ea6567-babe-4a76-9734-cefbedef8691)
-![detailedMenu2](https://github.com/s0heil20/BookStore/assets/59290468/de31d098-ddf6-41f6-9ba1-f569e98032b9)
+![image](https://github.com/rpirayadi/weather_app/assets/62210316/57d28440-1795-4b2e-9908-0601b048cd65)
+![image](https://github.com/rpirayadi/weather_app/assets/62210316/0276b610-8efa-4385-862a-3ec4dce73f65)
 
 
 ## Sort Key Selection Menu
 In this menu you can search books online! You can choose the three search options that are: in author, in publisher or in title!
 
-![image](https://github.com/s0heil20/BookStore/assets/59181565/c3a420e6-ed99-454a-b38e-59430a3aca4c)
-![image](https://github.com/s0heil20/BookStore/assets/59181565/48d8af43-e922-4164-8b3d-e2f91f594ea5)
-![image](https://github.com/s0heil20/BookStore/assets/59181565/2649b1aa-6e3e-48ec-a6dc-beaf3b100595)
-![image](https://github.com/s0heil20/BookStore/assets/59181565/9fd43a84-f6ce-4cf8-8128-412b6c5f8a77)
+![image](https://github.com/rpirayadi/weather_app/assets/62210316/b3af2e55-5f25-4ede-9f76-b723c4246be4)
+
 
 ## Sort Order Selection Menu
 This menu represents the user's shopping cart!
 
-![shoppingCart](https://github.com/s0heil20/BookStore/assets/59290468/cdb841c8-5b0e-4c15-b3c4-a450ea142e31)
+![image](https://github.com/rpirayadi/weather_app/assets/62210316/ade55b47-a685-496c-902f-a74336a5ee34)
+
 
 ## Sorted Favorite Cities Menu
 This menu shows the user, their favorite books!
 
-![image](https://github.com/s0heil20/BookStore/assets/59181565/bc834374-14b4-4a83-8bad-e17c9c2caac9)
-![image](https://github.com/s0heil20/BookStore/assets/59181565/2cfcae7a-11e6-40b5-8a5d-947b64432c20)
+![image](https://github.com/rpirayadi/weather_app/assets/62210316/16b93c10-836c-4293-86f9-ecbdc4d7383f)
 
